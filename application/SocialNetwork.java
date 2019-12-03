@@ -7,8 +7,14 @@ import java.util.regex.Pattern;
 
 public class SocialNetwork implements SocialNetworkADT {
   
-  Graph network;
+  /**
+   * Graph object for the social network
+   */
+  private Graph network;
   
+  /**
+   * Default no-arg constructor to instantiate new Graph object
+   */
   public SocialNetwork() {
     this.network = new Graph();
   }
@@ -160,30 +166,66 @@ public class SocialNetwork implements SocialNetworkADT {
     return null;
   }
 
+  /**
+   * TODO
+   * 
+   * Get all of the mutual friends between two users
+   * 
+   * @param user1 the first user
+   * @param user2 the second user
+   * 
+   * @return List<Person> list of the mutual friends between to two users
+   */
   @Override
   public List<Person> getMutualFriends(String user1, String user2) {
     // TODO Auto-generated method stub
     return null;
   }
 
+  /**
+   * TODO
+   * 
+   * Loads a file and constructs a social network from the file
+   * 
+   * @param file the file to load from
+   */
   @Override
   public void loadNetworkFromFile(File file) {
     // TODO Auto-generated method stub
-    
   }
 
+  /**
+   * TODO
+   * 
+   * Saves a social network to a file
+   * 
+   * @param file the file to save to
+   */
   @Override
   public void saveNetworkToFile(File file) {
     // TODO Auto-generated method stub
-    
   }
 
+  /**
+   * TODO
+   * 
+   * Finds the shortest path between all users of the network
+   * 
+   * @return List<Person> an ordered list of the shortest path
+   */
   @Override
   public List<Person> getShortestPath() {
     // TODO Auto-generated method stub
     return null;
   }
 
+  /**
+   * TODO
+   * 
+   * I don't know what this method is supposed to do yet
+   * 
+   * @return Set<Graph> a set of all connected components
+   */
   @Override
   public Set<Graph> getConnectedComponents() {
     // TODO Auto-generated method stub

@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Filename:   SocialNetworkADT.java
- * Authors:    Samson Cain
- * 
  * A simple social network interface
+ * 
+ * @author samsoncain
  */
 public interface SocialNetworkADT {
 
