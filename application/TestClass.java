@@ -1,5 +1,9 @@
 package application;
 
+/**
+ * 
+ * @author samsoncain
+ */
 public class TestClass {
 
   static SocialNetwork network;

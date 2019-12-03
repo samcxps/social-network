@@ -1,5 +1,9 @@
 package application;
 
+/**
+ * 
+ * @author samsoncain
+ */
 @SuppressWarnings("serial")
 public class InvalidUsernameException extends Exception {
 

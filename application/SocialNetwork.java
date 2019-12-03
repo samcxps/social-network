@@ -5,6 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 
+ * @author samsoncain
+ */
 public class SocialNetwork implements SocialNetworkADT {
   
   /**
