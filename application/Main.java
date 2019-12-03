@@ -1,23 +1,33 @@
 package application;
 
+import java.io.File;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author samsoncain
+ */
 public class Main extends Application {
-  private static Graph graph;
+  
+  private static SocialNetwork socialNetwork;
 
   private static final int WINDOW_WIDTH = 800;
   private static final int WINDOW_HEIGHT = 500;
@@ -30,7 +40,7 @@ public class Main extends Application {
     
     // Create new Graph
     // DOES NOTHING RIGHT NOW
-    graph = new Graph();
+    socialNetwork = new SocialNetwork();
     
     // Create Vertical box for main screen layout
     VBox mainPane = createMainPane();
@@ -67,11 +77,14 @@ public class Main extends Application {
   private HBox createToolBar() {
     HBox main = new HBox();
     
+    // Stylize the HBox a little bit
     main.setPadding(new Insets(20, 12, 15, 12));
     main.setSpacing(50);
     main.setStyle("-fx-background-color: #336699");
     
+    // Create settingsButton and handle clicking
     Button settingsButton = new Button("Settings");
+    createStylizedButton(settingsButton);
     settingsButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent arg0) {
@@ -79,18 +92,20 @@ public class Main extends Application {
       }
 
     });
-    // I made a method to create the drop shadow effect on buttons to clean up code
-    createStylizedButton(settingsButton);
     
+    
+    // stretch the settingsButton to window width
     settingsButton.setMaxWidth(Double.MAX_VALUE);
     HBox.setHgrow(settingsButton, Priority.ALWAYS);
     
+    // add settings button to the HBox
     main.getChildren().add(settingsButton);
+    
     return main;
   }
 
   private void createSettingsWindow() {    
-    // Set stage title
+    // Set settings window title
     Stage mainStage = new Stage();
     mainStage.setTitle("Settings");
 
@@ -101,25 +116,61 @@ public class Main extends Application {
     //////////////////////////////////////////////////////////
     //              Clear Graph Button Code                 //
     //////////////////////////////////////////////////////////
-    Button clearGraphButton = new Button("Clear Graph");
+    Button clearGraphButton = new Button("Clear Network");
     clearGraphButton.setMaxWidth(Main.WINDOW_WIDTH);
     createStylizedButton(clearGraphButton);
+    clearGraphButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent arg0) {
+        socialNetwork = null;
+        // drawGraph()
+      }
+    });
     //////////////////////////////////////////////////////////
     
     //////////////////////////////////////////////////////////
     //              Load File Button Code                   //
     //////////////////////////////////////////////////////////
-    Button loadFileButton = new Button("Load from File");
+    Button loadFileButton = new Button("Load Network from File");
     loadFileButton.setMaxWidth(Main.WINDOW_WIDTH);
     createStylizedButton(loadFileButton);
+    loadFileButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent arg0) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File file = fileChooser.showOpenDialog(mainStage);
+        if (file != null) {
+          socialNetwork.loadNetworkFromFile(file);
+        }
+      }
+    });
     //////////////////////////////////////////////////////////
     
     //////////////////////////////////////////////////////////
     //                 Export Button Code                   //
     //////////////////////////////////////////////////////////
-    Button exportButton = new Button("Export to File");
+    Button exportButton = new Button("Export Network to File");
     exportButton.setMaxWidth(Main.WINDOW_WIDTH);
     createStylizedButton(exportButton);
+    exportButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent arg0) {
+        FileChooser fileChooser = new FileChooser();
+        
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        
+        //Show save file dialog
+        File file = fileChooser.showSaveDialog(mainStage);
+        
+        if(file != null){
+          socialNetwork.saveNetworkToFile(file);
+        }
+      }
+    });
+    
     //////////////////////////////////////////////////////////
     
     // Add buttonHbox to mainPane Vbox
@@ -147,7 +198,7 @@ public class Main extends Application {
   private ScrollPane createScrollPane() {
     ScrollPane main = new ScrollPane();
     main.setFitToHeight(true);
-    main.setPrefHeight(this.WINDOW_HEIGHT);
+    main.setPrefHeight(WINDOW_HEIGHT);
     return main;
   }
   
@@ -156,7 +207,7 @@ public class Main extends Application {
     
     main.setPadding(new Insets(20, 12, 15, 12));
     
-    Label nameLabel = new Label("You currently have 32 friends");
+    Label nameLabel = new Label("You currently have " + Integer.toString(socialNetwork.getAllUsers().size()) + " friends.");
     
     main.getChildren().add(nameLabel);
     return main;
@@ -170,6 +221,7 @@ public class Main extends Application {
     main.setStyle("-fx-background-color: #336699");
     
     Button friendManagementButton = new Button("View All Friends");
+    createStylizedButton(friendManagementButton);
     friendManagementButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent arg0) {
@@ -177,7 +229,6 @@ public class Main extends Application {
       }
 
     });
-    createStylizedButton(friendManagementButton);
     
     friendManagementButton.setMaxWidth(Double.MAX_VALUE);
     HBox.setHgrow(friendManagementButton, Priority.ALWAYS);
@@ -195,48 +246,133 @@ public class Main extends Application {
     VBox mainPane = new VBox();
     
     //////////////////////////////////////////////////////////
-    //             Friends List Toolbar Code                //
+    //                 User Toolbar Code                    //
     //////////////////////////////////////////////////////////
-    HBox buttonHbox = new HBox();
-    buttonHbox.setPadding(new Insets(20, 12, 15, 12));
-    buttonHbox.setSpacing(50);
-    buttonHbox.setStyle("-fx-background-color: #336699");
+    HBox userHBox = new HBox();
+    userHBox.setPadding(new Insets(20, 12, 15, 12));
+    userHBox.setSpacing(20);
+    userHBox.setStyle("-fx-background-color: #336699");
     
-    Button addFriendButton = new Button("Add Friend");
-    Button removeFriendButton = new Button("Remove Friend");
-    Button openFriendButton = new Button("Open Friend");
+    TextField usernameTextField = new TextField("Username...");
     
+    Button addUserButton = new Button("Add User");
+    createStylizedButton(addUserButton);
+    addUserButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent arg0) {
+        try {
+          socialNetwork.addUser(usernameTextField.getText());
+        } catch (InvalidUsernameException e) {
+          Alert alert = new Alert(AlertType.ERROR);
+          alert.setTitle("Error");
+          alert.setHeaderText("Username Error");
+          alert.setContentText(e.getMessage());
+          alert.showAndWait();
+          
+        } catch (UserAlreadyExistsException e) {
+          Alert alert = new Alert(AlertType.ERROR);
+          alert.setTitle("Error");
+          alert.setHeaderText("Username Error");
+          alert.setContentText("Username already exists!");
+          alert.showAndWait();
+          
+        }
+        mainStage.close();
+        createFriendsListWindow();
+      }
+
+    });
+    Button removeUserButton = new Button("Remove User");
+    createStylizedButton(removeUserButton);
+    removeUserButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent arg0) {
+        try {
+          socialNetwork.removeUser(usernameTextField.getText());
+        } catch (UserNotFoundException e) {
+          Alert alert = new Alert(AlertType.ERROR);
+          alert.setTitle("Error");
+          alert.setHeaderText("Username Error");
+          alert.setContentText("User does not exist!");
+          alert.showAndWait();
+        }
+        mainStage.close();
+        createFriendsListWindow();
+      }
+
+    });
+    
+    Button focusUserButton = new Button("Open User");
+    createStylizedButton(focusUserButton);
+    focusUserButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent arg0) {
+        System.out.println("Not yet implemented");
+      }
+
+    });
+
+    
+    // Stretch all buttons
+    addUserButton.setMaxWidth(Double.MAX_VALUE);
+    removeUserButton.setMaxWidth(Double.MAX_VALUE);
+    focusUserButton.setMaxWidth(Double.MAX_VALUE);
+    HBox.setHgrow(addUserButton, Priority.ALWAYS);
+    HBox.setHgrow(removeUserButton, Priority.ALWAYS);
+    HBox.setHgrow(focusUserButton, Priority.ALWAYS);
+
+    
+    // Add all buttons to HBox
+    userHBox.getChildren().addAll(usernameTextField, addUserButton, removeUserButton, focusUserButton);
+    //////////////////////////////////////////////////////////
+    
+    //////////////////////////////////////////////////////////
+    //             Friendship Toolbar Code                  //
+    //////////////////////////////////////////////////////////
+    HBox friendshipHBox = new HBox();
+    friendshipHBox.setPadding(new Insets(20, 12, 15, 12));
+    friendshipHBox.setSpacing(20);
+    friendshipHBox.setStyle("-fx-background-color: #336699");
+    
+    Button addFriendButton = new Button("Add Friendship");
     createStylizedButton(addFriendButton);
+    addFriendButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent arg0) {
+        mainStage.close();
+        createFriendsListWindow();
+      }
+
+    });
+    Button removeFriendButton = new Button("Remove Friendship");
     createStylizedButton(removeFriendButton);
-    createStylizedButton(openFriendButton);
     
+    // Stretch all buttons
     addFriendButton.setMaxWidth(Double.MAX_VALUE);
     removeFriendButton.setMaxWidth(Double.MAX_VALUE);
-    openFriendButton.setMaxWidth(Double.MAX_VALUE);
-
     HBox.setHgrow(addFriendButton, Priority.ALWAYS);
     HBox.setHgrow(removeFriendButton, Priority.ALWAYS);
-    HBox.setHgrow(openFriendButton, Priority.ALWAYS);
 
     
-    // Add clearGraphButton to HBox
-    buttonHbox.getChildren().addAll(addFriendButton, removeFriendButton, openFriendButton);
+    // Add all buttons to HBox
+    friendshipHBox.getChildren().addAll(addFriendButton, removeFriendButton);
     //////////////////////////////////////////////////////////
     
     //////////////////////////////////////////////////////////
     //            Friends List Scrollable Code              //
     //////////////////////////////////////////////////////////
-    ListView listView = new ListView();
-    for(int i = 0; i < 100; i++) {
-      listView.getItems().add("Item" + i);
+    ListView<String> listView = new ListView<String>();
+    
+    for(Person p: socialNetwork.getAllUsers()) {
+      listView.getItems().add(p.getUsername() + " - ");
     }
     //////////////////////////////////////////////////////////
     
     // Add buttonHbox and scrollable list to mainPane Vbox
-    mainPane.getChildren().addAll(buttonHbox, listView);
+    mainPane.getChildren().addAll(userHBox, friendshipHBox, listView);
     
     // Create scene, add the main pane, and add the scene to our stage
-    Scene scene = new Scene(mainPane, 450, 450);
+    Scene scene = new Scene(mainPane, 700, 450);
     mainStage.setScene(scene);
     
     // Show stage
