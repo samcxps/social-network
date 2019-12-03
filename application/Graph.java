@@ -1,6 +1,7 @@
 package application;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -141,10 +142,14 @@ public class Graph implements GraphADT {
   }
   
   /**
-   * TODO: I have no clue what this method is for
+   * Returns the friends of a given user
+   * 
+   * @param person person to return friends for
+   * 
+   * @return Set<Person> neighbors of person
    */
   public Set<Person> getNeighbors(Person person) {
-    return null;
+    return new HashSet<Person>(this.people.get(person));
   }
   
   /**
