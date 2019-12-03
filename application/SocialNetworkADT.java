@@ -84,8 +84,10 @@ public interface SocialNetworkADT {
      * @param user the specified user
      * 
      * @return a List<Person> of all the friends of the specified person
+     * 
+     * @throws UserNotFoundException if user does not exist
      */
-    public List<Person> getFriendsOf(String user);
+    public List<Person> getFriendsOf(String user) throws UserNotFoundException;
     
     /**
      * Get all of the mutual friends between two users

@@ -1,11 +1,9 @@
 package application;
 
 import java.io.File;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 public class SocialNetwork implements SocialNetworkADT {
   
@@ -161,16 +159,21 @@ public class SocialNetwork implements SocialNetworkADT {
    * @param user the specified user
    * 
    * @return a List<Person> of all the friends of the specified person
+   * 
+   * @throws UserNotFoundException if user does not exist
    */
   @Override
-  public List<Person> getFriendsOf(String user) {
+  public List<Person> getFriendsOf(String user) throws UserNotFoundException {
     Person person = this.network.getNode(user);
-    return null;
+    if (person == null) {
+      throw new UserNotFoundException("User " + "'" + user + "'" + " does not exist");
+    }
+    
+    // return linked list of specified users friends
+    return new LinkedList<Person>(this.network.getNeighbors(person));
   }
 
-  /**
-   * TODO
-   * 
+  /** 
    * Get all of the mutual friends between two users
    * 
    * @param user1 the first user
