@@ -19,10 +19,6 @@ public interface GraphADT {
      * method ends without adding a person or 
      * throwing an exception.
      * 
-     * Valid argument conditions:
-     * 1. person is non-null
-     * 2. person is not already in the graph 
-     * 
      * @param person the person to be added
      */
     public boolean addNode(Person person);
@@ -35,10 +31,6 @@ public interface GraphADT {
      * If person is null or does not exist,
      * method ends without removing a person, friendships, 
      * or throwing an exception.
-     * 
-     * Valid argument conditions:
-     * 1. person is non-null
-     * 2. person is not already in the graph 
      *  
      * @param person the person to be removed
      */
@@ -51,11 +43,6 @@ public interface GraphADT {
      *
      * If the friendship exists in the graph,
      * no friendship is added and no exception is thrown.
-     * 
-     * Valid argument conditions:
-     * 1. neither person is null
-     * 2. both persons are in the graph 
-     * 3. the friendship is not in the graph
      *  
      * @param person1 the first person
      * @param person2 the second person
@@ -70,11 +57,6 @@ public interface GraphADT {
      * If either person does not exist,
      * or if an edge from person1 to person2 does not exist,
      * no friendship is removed and no exception is thrown.
-     * 
-     * Valid argument conditions:
-     * 1. neither person is null
-     * 2. both persons are in the graph 
-     * 3. the friendship from person1 to person2 is in the graph
      *  
      * @param person1 the first person
      * @param person2 the second person
