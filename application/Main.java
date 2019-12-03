@@ -1,6 +1,7 @@
 package application;
 
 import java.io.File;
+import java.util.Arrays;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -82,7 +83,7 @@ public class Main extends Application {
     main.setSpacing(50);
     main.setStyle("-fx-background-color: #336699");
     
-    // Create settingsButton and handle clicking
+    // Create settingsButton and handler
     Button settingsButton = new Button("Settings");
     createStylizedButton(settingsButton);
     settingsButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -92,7 +93,6 @@ public class Main extends Application {
       }
 
     });
-    
     
     // stretch the settingsButton to window width
     settingsButton.setMaxWidth(Double.MAX_VALUE);
@@ -123,7 +123,11 @@ public class Main extends Application {
       @Override
       public void handle(ActionEvent arg0) {
         socialNetwork = null;
+        /**
+         * TODO
+         */
         // drawGraph()
+        mainStage.close();
       }
     });
     //////////////////////////////////////////////////////////
@@ -254,6 +258,13 @@ public class Main extends Application {
     userHBox.setStyle("-fx-background-color: #336699");
     
     TextField usernameTextField = new TextField("Username...");
+    usernameTextField.textProperty().addListener((ob, old, newValue) -> {
+      if (newValue.matches("^[a-zA-Z0-9_']*$") && !newValue.isEmpty()) {
+        usernameTextField.setStyle("-fx-control-inner-background: #2ecc71");
+      } else {
+        usernameTextField.setStyle("-fx-control-inner-background: #e74c3c");
+      }
+    });
     
     Button addUserButton = new Button("Add User");
     createStylizedButton(addUserButton);
@@ -334,11 +345,50 @@ public class Main extends Application {
     friendshipHBox.setSpacing(20);
     friendshipHBox.setStyle("-fx-background-color: #336699");
     
+    TextField user1TextField = new TextField("User 1...");
+    user1TextField.textProperty().addListener((ob, old, newValue) -> {
+      if (newValue.matches("^[a-zA-Z0-9_']*$") && !newValue.isEmpty()) {
+        user1TextField.setStyle("-fx-control-inner-background: #2ecc71");
+      } else {
+        user1TextField.setStyle("-fx-control-inner-background: #e74c3c");
+      }
+    });
+    
+    TextField user2TextField = new TextField("User 2...");
+    user2TextField.textProperty().addListener((ob, old, newValue) -> {
+      if (newValue.matches("^[a-zA-Z0-9_']*$") && !newValue.isEmpty()) {
+        user2TextField.setStyle("-fx-control-inner-background: #2ecc71");
+      } else {
+        user2TextField.setStyle("-fx-control-inner-background: #e74c3c");
+      }
+    });
+
     Button addFriendButton = new Button("Add Friendship");
     createStylizedButton(addFriendButton);
     addFriendButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent arg0) {
+        
+        if (user1TextField.getText().matches("^[a-zA-Z0-9_']*$") 
+            && user2TextField.getText().matches("^[a-zA-Z0-9_']*$")
+            && !user1TextField.getText().isEmpty()
+            && !user2TextField.getText().isEmpty()) {
+          try {
+            socialNetwork.addFriend(user1TextField.getText(), user2TextField.getText());
+          } catch (UserNotFoundException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Username Error");
+            alert.setContentText("User does not exist!");
+            alert.showAndWait();
+          }
+        } else {
+          Alert alert = new Alert(AlertType.ERROR);
+          alert.setTitle("Error");
+          alert.setHeaderText("Username Error");
+          alert.setContentText("Username can only contain letters, digits, underscores, and apostrophes!");
+          alert.showAndWait();
+        }
         mainStage.close();
         createFriendsListWindow();
       }
@@ -355,7 +405,7 @@ public class Main extends Application {
 
     
     // Add all buttons to HBox
-    friendshipHBox.getChildren().addAll(addFriendButton, removeFriendButton);
+    friendshipHBox.getChildren().addAll(user1TextField, user2TextField, addFriendButton, removeFriendButton);
     //////////////////////////////////////////////////////////
     
     //////////////////////////////////////////////////////////
@@ -364,7 +414,7 @@ public class Main extends Application {
     ListView<String> listView = new ListView<String>();
     
     for(Person p: socialNetwork.getAllUsers()) {
-      listView.getItems().add(p.getUsername() + " - ");
+      listView.getItems().add(p.getUsername() + " - " + " FRIENDS LIST NOT YET IMPLEMENTED");
     }
     //////////////////////////////////////////////////////////
     
