@@ -60,9 +60,8 @@ public class Graph implements GraphADT {
       return false;
     }
 
-    // iterate through all people and remove friendships with specified person
-    for (Person p : this.people.keySet()) { // uses keySet() to get all keys in a Set so we can
-                                            // use enhanced for loop
+    // iterate through ALL nodes/keys and remove friendships with the specified person
+    for (Person p : this.people.keySet()) {
       this.people.get(p).remove(p);
     }
 
@@ -107,11 +106,6 @@ public class Graph implements GraphADT {
   /**
    * Remove the friendship from person1 to person2 from this graph.
    * 
-   * Valid argument conditions: 
-   *    1. neither person is null 
-   *    2. both friendships are in the graph 
-   *    3. the edge from person1 to person2 is in the graph
-   * 
    * @param Person person1 person to remove friendship from
    * @param Person person2 person to remove friendship of
    * 
@@ -142,7 +136,7 @@ public class Graph implements GraphADT {
   }
   
   /**
-   * TODO: I don't know what this method is for
+   * TODO: I have no clue what this method is for
    */
   public Set<Person> getNeighbors(Person person) {
     return null;
@@ -164,6 +158,7 @@ public class Graph implements GraphADT {
       }
     }
     
+    // return null if user/node does not exist
     return null;
   }
 
