@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Graph implementation based on GraphADT
+ * 
+ * @author samsoncain
+ */
 public class Graph implements GraphADT {
 
   /**

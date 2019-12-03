@@ -2,13 +2,12 @@ package application;
 
 import java.util.Set;
 
-/**
- * Filename:   GraphADT.java
- * Authors:    Samson Cain
- * 
+/** 
  * A simple graph interface for use in the Social Network Viewer
  * 
  * Based off of Deppeler's GraphADT but edited to use in this project
+ * 
+ * @author samsoncain
  */
 public interface GraphADT {
 
