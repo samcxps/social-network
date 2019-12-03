@@ -1,6 +1,5 @@
 package application;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -9,7 +8,7 @@ import java.util.Set;
  * 
  * A simple graph interface for use in the Social Network Viewer
  * 
- * Based off of Deppeler's GraphADT but edited for this project
+ * Based off of Deppeler's GraphADT but edited to use in this project
  */
 public interface GraphADT {
 
@@ -26,7 +25,7 @@ public interface GraphADT {
      * 
      * @param person the person to be added
      */
-    public void addPerson(Person person);
+    public boolean addNode(Person person);
 
     
     /**
@@ -41,9 +40,9 @@ public interface GraphADT {
      * 1. person is non-null
      * 2. person is not already in the graph 
      *  
-     * @param vertex the vertex to be removed
+     * @param person the person to be removed
      */
-    public void removePerson(Person person);
+    public boolean removeNode(Person person);
 
     
     /**
@@ -61,7 +60,7 @@ public interface GraphADT {
      * @param person1 the first person
      * @param person2 the second person
      */
-    public void addFriendship(Person person1, Person person2);
+    public boolean addEdge(Person person1, Person person2);
 
     
     /**
@@ -77,42 +76,47 @@ public interface GraphADT {
      * 2. both persons are in the graph 
      * 3. the friendship from person1 to person2 is in the graph
      *  
-     * @param person1 the first vertex
-     * @param person2 the second vertex
+     * @param person1 the first person
+     * @param person2 the second person
      */
-    public void removeEdge(Person person1, Person person2);
+    public boolean removeEdge(Person person1, Person person2);
     
+    /**
+     * 
+     * @param person to get neighbors for
+     * 
+     * @return Set<Person> of neighbors
+     */
+    public Set<Person> getNeighbors(Person person);
         
     /**
-     * Returns a Set that contains all the people in graph
+     * Returns the Person object fora specified username if it exists
      * 
-     * @return a Set<Person> which contains all the people in the graph
+     * @param user to get node for
+     * 
+     * @return Person object of user
      */
-    public Set<Person> getAllPeople();
-    
+    public Person getNode(String user);
     
     /**
-     * Get all the friends of a person
+     * Returns a Set that contains all the nodes in graph
      * 
-     * @param person the specified person
-     * 
-     * @return a List<Person> of all the friends of the specified person
+     * @return a Set<Person> which contains all the nodes in the graph
      */
-    public List<Person> getFriendsOf(Person person);
-    
+    public Set<Person> getAllNodes();   
 
     /**
-     * Returns the number of friendships in this graph.
+     * Returns the number of edges in this graph.
      * 
-     * @return number of friendships in the graph.
+     * @return number of edges in the graph.
      */
     public int size();
     
     
     /**
-     * Returns the number of people in this graph.
+     * Returns the number of nodes in this graph.
      * 
-     * @return number of people in graph.
+     * @return number of nodes in graph.
      */
     public int order();
 

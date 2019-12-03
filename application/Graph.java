@@ -27,44 +27,37 @@ public class Graph implements GraphADT {
   
   /**
    * Add new person to the graph.
-   *
-   * If person is null or already exists, method ends without adding a person or throwing an
-   * exception.
-   * 
-   * Valid argument conditions: 
-   *    1. person is non-null 
-   *    2. person is not already in the graph
    * 
    * @param Person person to add to graph
+   * 
+   * @return true if node was added, false if not
+
    */
   @Override
-  public void addPerson(Person person) {
+  public boolean addNode(Person person) {
     // check if person is null or if person already exists
     if (person == null || this.people.containsKey(person)) {
-      return;
+      return false;
     }
     
     // add new person to HashMap
     this.people.put(person, new LinkedList<Person>());
+    
+    return true;
   }
 
   /**
    * Remove a person and all associated friendships from the graph.
    * 
-   * If person is null or does not exist, method ends without removing a person, friendship, or throwing
-   * an exception.
-   * 
-   * Valid argument conditions: 
-   *    1. person is non-null 
-   *    2. person is not already in the graph
-   * 
    * @param Person person to remove from graph
+   * 
+   * @return true if node was removed, false if not
    */
   @Override
-  public void removePerson(Person person) {
+  public boolean removeNode(Person person) {
     // check if person is null or if person does not exist
     if (person == null || !this.people.containsKey(person)) {
-      return;
+      return false;
     }
 
     // iterate through all people and remove friendships with specified person
@@ -75,37 +68,24 @@ public class Graph implements GraphADT {
 
     // remove vertex from graph
     this.people.remove(person);
+    
+    return true;
   }
 
   /**
-   * Add the friendship from person1 to person2 to this graph.
-   * 
-   * If either person does not exist, add person, and add friendship, no exception is thrown. 
-   * If the edge friendship in the graph, no friendship is added and no exception is thrown.
-   * 
-   * Valid argument conditions: 
-   *    1. neither person is null 
-   *    2. both persons are in the graph 
-   *    3. the friendship is not in the graph
+   * Add an edge (friendship) from person1 to person2 to this graph.
    * 
    * @param Person person1 person to add friendship from
    * @param Person person2 person to add friendship to
+   * 
+   * @return true if edge was added, false if not
    */
   @Override
-  public void addFriendship(Person person1, Person person2) {
+  public boolean addEdge(Person person1, Person person2) {
     // make sure both persons are not null
+    // should be impossible but still good to check
     if (person1 == null || person2 == null) {
-      return;
-    }
-    
-    // check if person1 is not in graph and add if necessary
-    if (!this.people.containsKey(person1)) {
-      this.addPerson(person1);
-    }
-    
-    // check if person2 is not in graph and add if necessary
-    if (!this.people.containsKey(person2)) {
-      this.addPerson(person2);
+      return false;
     }
     
     // we need to add both friendship from person1 -> person2 and person2 -> person1
@@ -120,13 +100,12 @@ public class Graph implements GraphADT {
     if (!this.people.get(person2).contains(person1)) {
       this.people.get(person2).add(person1);
     }
+    
+    return true;
   }
 
   /**
    * Remove the friendship from person1 to person2 from this graph.
-   * 
-   * If either person does not exist, or if a friendship from person1 to person2 does not exist, no friendship is
-   * removed and no exception is thrown.
    * 
    * Valid argument conditions: 
    *    1. neither person is null 
@@ -135,17 +114,15 @@ public class Graph implements GraphADT {
    * 
    * @param Person person1 person to remove friendship from
    * @param Person person2 person to remove friendship of
+   * 
+   * @return true if edge was removed, false if not
    */
   @Override
-  public void removeEdge(Person person1, Person person2) {
+  public boolean removeEdge(Person person1, Person person2) {
     // make sure both persons are not null
+    // should be impossible but still good to check
     if (person1 == null || person2 == null) {
-      return;
-    }
-    
-    // check if person1 and person2 are in graph, return if they are not
-    if (!this.people.containsKey(person1) || !this.people.containsKey(person1)) {
-      return;
+      return false;
     }
     
     // we need to remove both friendship from person1 -> person2 and person2 -> person1
@@ -160,34 +137,50 @@ public class Graph implements GraphADT {
     if (this.people.get(person2).contains(person1)) {
       this.people.get(person2).remove(person1);
     }
+    
+    return true;
+  }
+  
+  /**
+   * TODO: I don't know what this method is for
+   */
+  public Set<Person> getNeighbors(Person person) {
+    return null;
+  }
+  
+  /**
+   * Returns the Person object for a specified node
+   * 
+   * @param user the username of the node to get
+   * 
+   * @return Person the person object of the node
+   */
+  public Person getNode(String user) {    
+    // get person object from graph with specified username
+    // if they exist
+    for (Person p: this.people.keySet()) {
+      if (p.getUsername().equals(user)) {
+        return p;
+      }
+    }
+    
+    return null;
   }
 
   /**
-   * Returns a Set that contains all the people in graph
+   * Returns a Set that contains all the nodes in graph
    * 
-   * @return Set<Person> set of people
+   * @return Set<Person> set of nodes
    */
   @Override
-  public Set<Person> getAllPeople() {
+  public Set<Person> getAllNodes() {
     return this.people.keySet();
   }
 
   /**
-   * Get all the friends of a person
+   * Returns the number of edges in this graph.
    * 
-   * @param Person person the person you want to get friends of
-   * 
-   * @return List<Person> list of friends
-   */
-  @Override
-  public List<Person> getFriendsOf(Person person) {
-    return this.people.get(person);
-  }
-
-  /**
-   * Returns the number of friendships in this graph.
-   * 
-   * @return int the number of friendships
+   * @return int the number of edges
    */
   @Override
   public int size() {
@@ -202,15 +195,13 @@ public class Graph implements GraphADT {
   }
 
   /**
-   * Returns the number of people in this graph.
+   * Returns the number of nodes in this graph.
    * 
-   * @return int the number of people
+   * @return int the number of nodes
    */
   @Override
   public int order() {
     return this.people.size();
   }
-  
-  
   
 }
