@@ -1,6 +1,8 @@
 package application;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -175,11 +177,32 @@ public class SocialNetwork implements SocialNetworkADT {
    * @param user2 the second user
    * 
    * @return List<Person> list of the mutual friends between to two users
+   * 
+   * @throws UserNotFoundException if a user does not exist
    */
   @Override
-  public List<Person> getMutualFriends(String user1, String user2) {
-    // TODO Auto-generated method stub
-    return null;
+  public Set<Person> getMutualFriends(String user1, String user2) throws UserNotFoundException {
+    // get Person object from graph for user1
+    Person person1 = this.network.getNode(user1);
+    if (person1 == null) {
+      throw new UserNotFoundException("User " + "'" + user1 + "'" + " does not exist");
+    }
+    
+    // get Person object from graph for user2
+    Person person2 = this.network.getNode(user2);
+    if (person2 == null) {
+      throw new UserNotFoundException("User " + "'" + user2 + "'" + " does not exist");
+    }
+    
+    // store both persons friend list in sets
+    Set<Person> person1Friends = this.network.getNeighbors(person1);
+    Set<Person> person2Friends = this.network.getNeighbors(person2);
+    
+    // removes all users from person1Friends that are not also in person2Friends
+    // equivalent to "person1Friends AND person2Friends"
+    person1Friends.retainAll(person2Friends);
+    
+    return person1Friends;
   }
 
   /**

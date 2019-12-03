@@ -94,8 +94,10 @@ public interface SocialNetworkADT {
      * @param user2 the second user
      * 
      * @return List<Person> list of the mutual friends between to two users
+     * 
+     * @throws UserNotFoundException if user does not exist
      */
-    public List<Person> getMutualFriends(String user1, String user2);
+    public Set<Person> getMutualFriends(String user1, String user2) throws UserNotFoundException;
     
     /**
      * 
