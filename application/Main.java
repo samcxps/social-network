@@ -124,7 +124,7 @@ public class Main extends Application {
       public void handle(ActionEvent arg0) {
         socialNetwork = null;
         /**
-         * TODO
+         * TODO socialNetwork = new SocialNetwork(); ?
          */
         // drawGraph()
         mainStage.close();
