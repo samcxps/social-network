@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.io.*;
 
 /**
  * 
@@ -156,6 +157,18 @@ public class SocialNetwork implements SocialNetworkADT {
   public Set<Person> getAllUsers() {
     return this.network.getAllNodes();
   }
+  
+  public Person getPersonByName(String name) { // TODO
+      Person returnPerson = null;
+      Object[] peopleArray =  getAllUsers().toArray();
+      for (int i = 0; i < peopleArray.length; i++) {
+          returnPerson = (Person) peopleArray[i];
+          if (returnPerson.getUsername().equals(name)) {
+              return returnPerson;
+          }
+      }
+      return null;
+  }
 
   /**
    * Get all the friends of a user
@@ -222,6 +235,63 @@ public class SocialNetwork implements SocialNetworkADT {
   @Override
   public void loadNetworkFromFile(File file) {
     // TODO Auto-generated method stub
+	  try {
+			BufferedReader saveFile = new BufferedReader(new FileReader(file));
+			String reader;
+			while ((reader = saveFile.readLine()) != null) {
+				if (reader.isBlank()) {
+					break; // skip the blank lines at the end of txt
+				}
+				String[] splitstr = reader.split("\\s+");
+				if (reader.charAt(0) == 'a') {// add
+					if (splitstr.length == 2) {// add one user
+						if (addUser(splitstr[1])) {
+							continue;
+						}
+					}
+					if (splitstr.length == 3) {// add two users and friendship
+						if (this.network.getNode(splitstr[1]) == null) {
+							addUser(splitstr[1]);
+						}
+						if (this.network.getNode(splitstr[2]) == null) {
+							addUser(splitstr[2]);
+						}
+						if (addFriend(splitstr[1], splitstr[2])) {
+							continue;
+						}
+					}
+				}
+				if (reader.charAt(0) == 'r') {// remove
+					if (splitstr.length == 2) {// remove one user
+						if (removeUser(splitstr[1])) {
+							continue;
+						}
+					}
+					if (splitstr.length == 3) {// remove twop users and friendship
+						if (removeFriend(splitstr[1], splitstr[2])) {
+							continue;
+						}
+					}
+				}
+				if (reader.charAt(0) == 's') {// set central user
+					// TODO
+				}
+			}
+			saveFile.close();
+		} catch (FileNotFoundException e) {
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InvalidUsernameException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UserAlreadyExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UserNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
   }
 
   /**
