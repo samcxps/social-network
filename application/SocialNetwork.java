@@ -1,10 +1,17 @@
 package application;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
-import java.io.*;
 
 /**
  * 
@@ -225,9 +232,7 @@ public class SocialNetwork implements SocialNetworkADT {
     return person1Friends;
   }
 
-  /**
-   * TODO
-   * 
+  /** 
    * Loads a file and constructs a social network from the file
    * 
    * @param file the file to load from
@@ -304,32 +309,6 @@ public class SocialNetwork implements SocialNetworkADT {
   @Override
   public void saveNetworkToFile(File file) {
     // TODO Auto-generated method stub
-  }
-
-  /**
-   * TODO
-   * 
-   * Finds the shortest path between all users of the network
-   * 
-   * @return List<Person> an ordered list of the shortest path
-   */
-  @Override
-  public List<Person> getShortestPath() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  /**
-   * TODO
-   * 
-   * I don't know what this method is supposed to do yet
-   * 
-   * @return Set<Graph> a set of all connected components
-   */
-  @Override
-  public Set<Graph> getConnectedComponents() {
-    // TODO Auto-generated method stub
-    return null;
   }
 
 }

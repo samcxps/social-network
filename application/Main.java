@@ -2,6 +2,7 @@ package application;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Optional;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -11,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -24,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * 
@@ -51,11 +55,33 @@ public class Main extends Application {
 
         // Create scene, add the main pane, and add the scene to our stage
         Scene scene = new Scene(mainPane, WINDOW_WIDTH, WINDOW_HEIGHT);
+        primaryStage.setOnCloseRequest(closeWindowHandler);
         primaryStage.setScene(scene);
 
         // Show stage
         primaryStage.show();
     }
+    
+    private EventHandler<WindowEvent> closeWindowHandler = event -> {
+      ButtonType save = new ButtonType("Save and Exit", ButtonBar.ButtonData.OK_DONE);
+      ButtonType dontSave = new ButtonType("Exit Without Saving", ButtonBar.ButtonData.CANCEL_CLOSE);
+      Alert closeConfirmation = new Alert(
+              Alert.AlertType.CONFIRMATION,
+              "Do you want to save before exiting?",
+              save, dontSave
+      );
+      
+      Optional<ButtonType> result = closeConfirmation.showAndWait();
+      
+      /**
+       * TODO
+       * 
+       * add line to save once that code is implemented
+       */
+      if (result.orElse(dontSave) == save) {
+        // socialNetwork.save()
+      }
+    };
 
 
     private VBox createMainPane() {

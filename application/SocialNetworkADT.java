@@ -102,18 +102,6 @@ public interface SocialNetworkADT {
     public Set<Person> getMutualFriends(String user1, String user2) throws UserNotFoundException;
     
     /**
-     * 
-     * @return
-     */
-    public List<Person> getShortestPath();
-    
-    /**
-     * 
-     * @return
-     */
-    public Set<Graph> getConnectedComponents();
-    
-    /**
      * Loads a file and constructs a social network from the file
      * 
      * @param file the file to load from
@@ -126,5 +114,4 @@ public interface SocialNetworkADT {
      * @param file the file to save to
      */
     public void saveNetworkToFile(File file);
-
 }
