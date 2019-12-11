@@ -13,6 +13,11 @@ public class Person {
   private String username;
   
   /**
+   * Person objects visited status
+   */
+  private Boolean visited;
+  
+  /**
    * Only constructor. Takes the username as a String.
    * 
    * @param username username for the Person
@@ -28,6 +33,24 @@ public class Person {
    */
   public String getUsername() {
     return this.username;
+  }
+
+  /**
+   * Get visited status
+   * 
+   * @return true if visited, false if not
+   */
+  public Boolean getVisited() {
+    return visited;
+  }
+
+  /**
+   * Set visited status
+   * 
+   * @param visited
+   */
+  public void setVisited(Boolean visited) {
+    this.visited = visited;
   }
 
 }
