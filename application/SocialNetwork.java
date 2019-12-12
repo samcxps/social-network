@@ -6,16 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
+import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 /**
  * 
@@ -27,10 +22,6 @@ public class SocialNetwork implements SocialNetworkADT {
    * Graph object for the social network
    */
   private Graph network;
-  
-  Commands command;
-  
-  Queue<String> queue = new LinkedList<String>();
   
   /**
    * Default no-arg constructor to instantiate new Graph object
@@ -99,7 +90,7 @@ public class SocialNetwork implements SocialNetworkADT {
     if (person == null) {
       throw new UserNotFoundException();
     }
-    
+        
     // remove it
     return this.network.removeNode(person);
   }
@@ -315,25 +306,64 @@ public class SocialNetwork implements SocialNetworkADT {
    * @param file the file to save to
    */
   @Override
-  public void saveNetworkToFile(File file) {
-    // TODO Auto-generated method stub
-	  FileWriter writer;
+  public void saveNetworkToFile(File file, Queue<String> commandList) {
+    PrintStream writer;
+	
 	try {
-		while(!queue.isEmpty())
-		{
-		  writer = new FileWriter(file);
-		  writer.write(queue.remove());
-		  writer.close();
+	    writer = new PrintStream(file);
+
+		while(!commandList.isEmpty()) {
+		  String cmd = commandList.remove();
+		  System.out.println(cmd);
+		  writer.println(cmd);
 		}
+        writer.close();
+
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 
   }
-
-  class Commands {
-		String add = "a";
-		String remove = "r";
-	}
+  
+//  class Command {
+//    private static final String ADD = "a";
+//    private static final String REMOVE = "r";
+//    
+//    private String command;
+//    
+//    public Command(String command) {
+//      this.command = command;
+//      this.parseCommand();
+//    }
+//    
+//    private void parseCommand() {
+//      String[] cmd = this.command.split(" ");
+//      
+//      try {
+//        if (cmd[0].equals(ADD)) {
+//          if (cmd.length == 2) {
+//            
+//          } else if (cmd.length == 3) {
+//            
+//          } else {
+//            System.out.println("Invalid command");
+//          }
+//        } else if (cmd[0].equals(REMOVE)) {
+//          if (cmd.length == 2) {
+//            
+//          } else if (cmd.length == 3) {
+//            
+//          } else {
+//            System.out.println("Invalid command");
+//          }
+//        } else {
+//          System.out.println("Invalid command");
+//        }
+//      } catch (IndexOutOfBoundsException e) {
+//        System.out.println("Invalid Command");
+//      }
+//      
+//    }
+//    
+//  }
 }

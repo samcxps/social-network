@@ -46,10 +46,14 @@ public class Main extends Application {
 	private static final int WINDOW_HEIGHT = 500;
 	private static final String APP_TITLE = "Social Network Viewer";
 	private String currentUser; // TODO
-	Stage firstStage;
+	private Stage firstStage;
+	private Queue<String> commandList;
+
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+	    this.commandList = new LinkedList<String>();
+
 		firstStage = primaryStage; // TODO
 
 		// Set stage title
@@ -81,7 +85,7 @@ public class Main extends Application {
 		 * add line to save once that code is implemented
 		 */
 		if (result.orElse(dontSave) == save) {
-			// socialNetwork.save()
+          // socialNetwork.saveNetworkToFile(file, commandList);
 		}
 	};
 
@@ -204,7 +208,7 @@ public class Main extends Application {
 				File file = fileChooser.showSaveDialog(mainStage);
 
 				if (file != null) {
-					socialNetwork.saveNetworkToFile(file);
+					socialNetwork.saveNetworkToFile(file, commandList);
 				}
 			}
 		});
@@ -354,7 +358,7 @@ public class Main extends Application {
 			public void handle(ActionEvent arg0) {
 				try {
 					socialNetwork.addUser(usernameTextField.getText());
-					socialNetwork.queue.add(socialNetwork.command.add + " " + usernameTextField.getText());
+					commandList.add("a " + usernameTextField.getText());
 				} catch (InvalidUsernameException e) {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setTitle("Error");
@@ -384,7 +388,7 @@ public class Main extends Application {
 					try {
 						socialNetwork.removeFriend(currentUser, usernameTextField.getText());
 						socialNetwork.removeUser(usernameTextField.getText());
-						socialNetwork.queue.add(socialNetwork.command.remove + " " + usernameTextField.getText());
+	                    commandList.add("r " + usernameTextField.getText());
 					} catch (UserNotFoundException e) {
 						Alert alert = new Alert(AlertType.ERROR);
 						alert.setTitle("Error");
@@ -419,6 +423,7 @@ public class Main extends Application {
 					alert.showAndWait();
 				} else {
 					currentUser = usernameTextField.getText();
+                    commandList.add("s " + usernameTextField.getText());
 					try {
 						start(firstStage);
 						mainStage.close();
@@ -479,7 +484,7 @@ public class Main extends Application {
 						&& !user2TextField.getText().isEmpty()) {
 					try {
 						socialNetwork.addFriend(user1TextField.getText(), user2TextField.getText());
-						socialNetwork.queue.add(socialNetwork.command.add + " " + user1TextField.getText() + " " + user2TextField.getText());
+                        commandList.add("a " + user1TextField.getText() + " " + user2TextField.getText());
 					} catch (UserNotFoundException e) {
 						Alert alert = new Alert(AlertType.ERROR);
 						alert.setTitle("Error");
@@ -510,7 +515,7 @@ public class Main extends Application {
 						&& !user2TextField.getText().isEmpty()) {
 					try {
 						socialNetwork.removeFriend(user1TextField.getText(), user2TextField.getText());
-						socialNetwork.queue.add(socialNetwork.command.add + " " + user1TextField.getText() + " " + user2TextField.getText());
+                        commandList.add("r " + user1TextField.getText() + " " + user2TextField.getText());
 					} catch (UserNotFoundException e) {
 						Alert alert = new Alert(AlertType.ERROR);
 						alert.setTitle("Error");

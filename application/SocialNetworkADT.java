@@ -2,6 +2,7 @@ package application;
 
 import java.io.File;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -113,5 +114,7 @@ public interface SocialNetworkADT {
      * 
      * @param file the file to save to
      */
-    public void saveNetworkToFile(File file);
+    public void saveNetworkToFile(File file, Queue<String> commandList);
+
+
 }
