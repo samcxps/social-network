@@ -16,7 +16,7 @@ SRC = application/*.java
 
 APP = application.Main 
 
-ARGS = deb mark sapan  # place your command line args here
+ARGS = Yonghee Alexander Matvey Samson Xuanting # place your command line args here
 
 compile:
 	$(JC) $(CP) $(SRC) 
