@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * 
@@ -23,6 +27,10 @@ public class SocialNetwork implements SocialNetworkADT {
    * Graph object for the social network
    */
   private Graph network;
+  
+  Commands command;
+  
+  Queue<String> queue = new LinkedList<String>();
   
   /**
    * Default no-arg constructor to instantiate new Graph object
@@ -272,7 +280,7 @@ public class SocialNetwork implements SocialNetworkADT {
 							continue;
 						}
 					}
-					if (splitstr.length == 3) {// remove twop users and friendship
+					if (splitstr.length == 3) {// remove two users and friendship
 						if (removeFriend(splitstr[1], splitstr[2])) {
 							continue;
 						}
@@ -309,6 +317,23 @@ public class SocialNetwork implements SocialNetworkADT {
   @Override
   public void saveNetworkToFile(File file) {
     // TODO Auto-generated method stub
+	  FileWriter writer;
+	try {
+		while(!queue.isEmpty())
+		{
+		  writer = new FileWriter(file);
+		  writer.write(queue.remove());
+		  writer.close();
+		}
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
   }
 
+  class Commands {
+		String add = "a";
+		String remove = "r";
+	}
 }
