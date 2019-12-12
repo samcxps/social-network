@@ -314,7 +314,6 @@ public class SocialNetwork implements SocialNetworkADT {
 
 		while(!commandList.isEmpty()) {
 		  String cmd = commandList.remove();
-		  System.out.println(cmd);
 		  writer.println(cmd);
 		}
         writer.close();
