@@ -287,20 +287,15 @@ public class SocialNetwork implements SocialNetworkADT {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InvalidUsernameException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UserAlreadyExistsException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
   }
 
   /**
-   * TODO
-   * 
    * Saves a social network to a file
    * 
    * @param file the file to save to
@@ -323,46 +318,5 @@ public class SocialNetwork implements SocialNetworkADT {
 	}
 
   }
-  
-//  class Command {
-//    private static final String ADD = "a";
-//    private static final String REMOVE = "r";
-//    
-//    private String command;
-//    
-//    public Command(String command) {
-//      this.command = command;
-//      this.parseCommand();
-//    }
-//    
-//    private void parseCommand() {
-//      String[] cmd = this.command.split(" ");
-//      
-//      try {
-//        if (cmd[0].equals(ADD)) {
-//          if (cmd.length == 2) {
-//            
-//          } else if (cmd.length == 3) {
-//            
-//          } else {
-//            System.out.println("Invalid command");
-//          }
-//        } else if (cmd[0].equals(REMOVE)) {
-//          if (cmd.length == 2) {
-//            
-//          } else if (cmd.length == 3) {
-//            
-//          } else {
-//            System.out.println("Invalid command");
-//          }
-//        } else {
-//          System.out.println("Invalid command");
-//        }
-//      } catch (IndexOutOfBoundsException e) {
-//        System.out.println("Invalid Command");
-//      }
-//      
-//    }
-//    
-//  }
+
 }

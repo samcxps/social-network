@@ -1,12 +1,8 @@
 package application;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.Optional;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -16,7 +12,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -31,7 +26,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 /**
@@ -79,13 +73,19 @@ public class Main extends Application {
 
 		Optional<ButtonType> result = closeConfirmation.showAndWait();
 
-		/**
-		 * TODO
-		 * 
-		 * add line to save once that code is implemented
-		 */
 		if (result.orElse(dontSave) == save) {
-          // socialNetwork.saveNetworkToFile(file, commandList);
+		  FileChooser fileChooser = new FileChooser();
+
+          // Set extension filter
+          FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+          fileChooser.getExtensionFilters().add(extFilter);
+
+          // Show save file dialog
+          File file = fileChooser.showSaveDialog(firstStage);
+
+          if (file != null) {
+              socialNetwork.saveNetworkToFile(file, commandList);
+          }		  
 		}
 	};
 
